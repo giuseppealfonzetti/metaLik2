@@ -1,5 +1,5 @@
 model_normal_normal <- function() {
-  set_model(
+  metaLik2_set_model(
     NAME = "normal_normal",
     DATA_TYPE = "continuous",
     LOGLIK = function(theta, data) {

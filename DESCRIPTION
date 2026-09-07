@@ -5,7 +5,8 @@ Authors@R:
     person("Giuseppe", "Alfonzetti", , "giuseppe.alfonzetti@uniud.it", role = c("aut", "cre"))
 Description: What the package does (one paragraph).
 License: MIT + file LICENSE
-Suggests: 
+Suggests:
+    metaLik,
     testthat (>= 3.0.0)
 Imports:
     likelihoodAsy

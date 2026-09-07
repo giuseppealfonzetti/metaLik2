@@ -1,6 +1,6 @@
 #' Set data column names
 #'
-#' Automatic dispatch used in [set_data()] to fill the `COLS` header names vector.
+#' Automatic dispatch used in [metaLik2_set_data()] to fill the `COLS` header names vector.
 #'
 #' @param TYPE Outcome type: `"continuous"` or `"binary"`.
 #' @param COLS Optional named character vector overriding default column names
@@ -9,10 +9,10 @@
 #'   `TYPE = "binary"`.
 #' @return A named character vector mapping roles to column names.
 #' @examples
-#' set_data_cols("continuous")
-#' set_data_cols("binary", c(event1 = "tpos", n1 = "trials"))
+#' metaLik2_set_data_cols("continuous")
+#' metaLik2_set_data_cols("binary", c(event1 = "tpos", n1 = "trials"))
 #' @export
-set_data_cols <- function(TYPE = c("continuous", "binary"), COLS = NULL) {
+metaLik2_set_data_cols <- function(TYPE = c("continuous", "binary"), COLS = NULL) {
   TYPE <- match.arg(TYPE)
   cols <- switch(
     TYPE,
@@ -29,7 +29,7 @@ set_data_cols <- function(TYPE = c("continuous", "binary"), COLS = NULL) {
 #' @param DATA A data frame of study-level columns.
 #' @param TYPE Outcome type: `"continuous"` for study-level effect estimate; `"binary"` for a study-specific 2x2 table of event counts.
 #' @param COLS Optional named character vector overriding the default column
-#'   names from [set_data_cols()], e.g. `c(effect = "logOR")`. Valid roles are
+#'   names from [metaLik2_set_data_cols()], e.g. `c(effect = "logOR")`. Valid roles are
 #'   `effect`, `variance` for `TYPE = "continuous"` and `event1`, `n1`,
 #'   `event2`, `n2` for `TYPE = "binary"`.
 #'
@@ -37,14 +37,14 @@ set_data_cols <- function(TYPE = c("continuous", "binary"), COLS = NULL) {
 #'   `data` argument of [metaLik2()].
 #'
 #' @export
-set_data <- function(
+metaLik2_set_data <- function(
   DATA,
   TYPE = c("continuous", "binary"),
   COLS = NULL
 ) {
   TYPE <- match.arg(TYPE)
   stopifnot(is.data.frame(DATA))
-  cols <- set_data_cols(TYPE, COLS)
+  cols <- metaLik2_set_data_cols(TYPE, COLS)
   miss <- setdiff(cols, names(DATA))
   if (length(miss)) {
     stop("columns not found in DATA: ", paste(miss, collapse = ", "))

@@ -18,7 +18,7 @@
 #'
 #' @return An object of class `metaLik_model`.
 #' @export
-set_model <- function(
+metaLik2_set_model <- function(
   NAME,
   DATA_TYPE,
   LOGLIK,
@@ -59,7 +59,7 @@ set_model <- function(
 
 #' @param x A `metaLik_model` object.
 #' @param ... Ignored.
-#' @rdname set_model
+#' @rdname metaLik2_set_model
 #' @export
 print.metaLik_model <- function(x, ...) {
   cat(sprintf("metaLik model: %s (%s)\n", x$name, x$data_type))

@@ -2,6 +2,10 @@
 % Please edit documentation in R/metaLik2.R
 \name{metaLik2}
 \alias{metaLik2}
+\alias{coef.metaLik2}
+\alias{vcov.metaLik2}
+\alias{logLik.metaLik2}
+\alias{print.metaLik2}
 \title{Fit a meta-analysis model}
 \usage{
 metaLik2(
@@ -10,18 +14,28 @@ metaLik2(
   FORMULA = ~1,
   ...
 )
+
+\method{coef}{metaLik2}(object, ...)
+
+\method{vcov}{metaLik2}(object, ...)
+
+\method{logLik}{metaLik2}(object, ...)
+
+\method{print}{metaLik2}(x, ...)
 }
 \arguments{
 \item{MODEL}{Model name: \code{"normal_normal"} (continuous outcomes),
 \code{"binomial_normal"} or \code{"binomial_beta"} (binary outcomes). The data
 \code{type} must match the chosen model.}
 
-\item{DATA}{A \code{metaLik_data} object from \code{\link[=set_data]{set_data()}}.}
+\item{DATA}{A \code{metaLik_data} object from \code{\link[=metaLik2_set_data]{metaLik2_set_data()}}.}
 
 \item{FORMULA}{One-sided formula of study-level covariates for meta-regression
 (continuous outcomes only). Defaults to \code{~ 1}.}
 
 \item{...}{Passed to the model constructor.}
+
+\item{object, x}{A \code{metaLik2} fit, for the accessor and print methods.}
 }
 \value{
 An object of class \code{metaLik2}.

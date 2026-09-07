@@ -19,7 +19,8 @@ knitr::opts_chunk$set(
 [![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
 <!-- badges: end -->
 
-The goal of metaLik2 is to ...
+The `metaLik2` provides higher order likelihood inference for random-effects
+meta-analysis and meta-regression models. It leverages the `likelihoodAsy` package to provide a modular extension to further models than 
 
 ## Installation
 
@@ -29,3 +30,54 @@ You can install the development version of metaLik2 like so:
 pak::pkg_install("giuseppealfonzetti/metaLik2")
 ```
 
+## Usage
+
+We fit the same random-effects model to the `diuretics` data shipped with
+`metaLik`, using both `metaLik()` and `metaLik2()`
+
+```{r setup}
+library(metaLik)
+library(metaLik2)
+data(diuretics)
+
+d <- metaLik2_set_data(diuretics, "continuous")
+d
+fit <- metaLik2::metaLik2("normal_normal", d)
+fit0 <- metaLik::metaLik(y ~ 1, data = diuretics, sigma2 = sigma2)
+```
+
+### A metaLik2 fit
+
+The fit object supports `print()`, `coef()`, `vcov()` and `logLik()` methods.
+
+```{r methods}
+fit 
+coef(fit)
+vcov(fit)
+logLik(fit)
+
+coef(fit0)
+log(fit0$tau2.mle)
+logLik(fit0) # constant term dropped
+```
+
+### Hypothesis testing
+
+Both packages test a scalar parameter using the
+`r` statistic or Skovgaard's `r*`. In `metaLik2()` computations are run via `likelihoodAsy`
+
+```{r test}
+metaLik2::rstar_test(fit, PARAM = 1, ALTERNATIVE = "greater")
+metaLik::test.metaLik(fit0, param = 1, alternative = "greater")
+```
+
+### Confidence intervals
+
+Confidence intervals can be computed via `rstar_ci()`, which returns an `rstarci` object from the `likelihoodAsy` package, with `print()`, `summary()` and `plot()` methods.
+
+```{r rstarci}
+pr <- metaLik2::rstar_ci(fit, SEED = 123)
+pr
+summary(pr)
+plot(pr)
+```

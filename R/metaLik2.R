@@ -3,10 +3,11 @@
 #' @param MODEL Model name: `"normal_normal"` (continuous outcomes),
 #'   `"binomial_normal"` or `"binomial_beta"` (binary outcomes). The data
 #'   `type` must match the chosen model.
-#' @param DATA A `metaLik_data` object from [set_data()].
+#' @param DATA A `metaLik_data` object from [metaLik2_set_data()].
 #' @param FORMULA One-sided formula of study-level covariates for meta-regression
 #'   (continuous outcomes only). Defaults to `~ 1`.
 #' @param ... Passed to the model constructor.
+#' @param object,x A `metaLik2` fit, for the accessor and print methods.
 #'
 #' @return An object of class `metaLik2`.
 #'
@@ -59,15 +60,24 @@ metaLik2 <- function(
   )
 }
 
+#' @rdname metaLik2
 #' @export
 coef.metaLik2 <- function(object, ...) object$coefficients
 
+#' @rdname metaLik2
 #' @export
 vcov.metaLik2 <- function(object, ...) object$vcov
 
+#' @rdname metaLik2
 #' @export
-logLik.metaLik2 <- function(object, ...) object$logLik
-
+logLik.metaLik2 <- function(object, ...) {
+  df <- length(object$coefficients)
+  if (!is.null(object$model$het)) {
+    df <- df + (object$model$het(object$coefficients) > 0)
+  }
+  structure(object$logLik, df = df, class = "logLik")
+}
+#' @rdname metaLik2
 #' @export
 print.metaLik2 <- function(x, ...) {
   cat("metaLik2 fit:", x$model$name, "\n\n")
