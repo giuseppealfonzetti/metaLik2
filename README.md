@@ -7,6 +7,7 @@
 
 [![Lifecycle:
 experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
+[![R-CMD-check](https://github.com/giuseppealfonzetti/metaLik2/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/giuseppealfonzetti/metaLik2/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
 The `metaLik2` provides higher order likelihood inference for
