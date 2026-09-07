@@ -104,11 +104,17 @@ metaLik::test.metaLik(fit0, param = 1, alternative = "greater")
 ### Confidence intervals
 
 Confidence intervals can be computed via `rstar_ci()`, which returns an
-`rstarci` object from the `likelihoodAsy` package, with `print()`,
-`summary()` and `plot()` methods.
+`rstarci` object from the `likelihoodAsy` package
 
 ``` r
 pr <- metaLik2::rstar_ci(fit, SEED = 123)
+class(pr)
+#> [1] "rstarci"
+```
+
+which comes with `print()`, `summary()` and `plot()` methods.
+
+``` r
 pr
 #> Confidence interval calculations based on likelihood asymptotics
 #> 1st-order
@@ -142,4 +148,4 @@ summary(pr)
 plot(pr)
 ```
 
-<img src="man/figures/README-rstarci-1.png" alt="" width="100%" />
+<img src="man/figures/README-unnamed-chunk-2-1.png" alt="" width="100%" />
