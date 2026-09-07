@@ -4,7 +4,7 @@
 \alias{set_data}
 \title{Set data for meta-analysis}
 \usage{
-set_data(DATA, TYPE = c("continuous", "binary"), COLS = NULL, COVARIATES = ~1)
+set_data(DATA, TYPE = c("continuous", "binary"), COLS = NULL)
 }
 \arguments{
 \item{DATA}{A data frame of study-level columns.}
@@ -15,9 +15,6 @@ set_data(DATA, TYPE = c("continuous", "binary"), COLS = NULL, COVARIATES = ~1)
 names from \code{\link[=set_data_cols]{set_data_cols()}}, e.g. \code{c(effect = "logOR")}. Valid roles are
 \code{effect}, \code{variance} for \code{TYPE = "continuous"} and \code{event1}, \code{n1},
 \code{event2}, \code{n2} for \code{TYPE = "binary"}.}
-
-\item{COVARIATES}{Only available for \code{TYPE="continuous"}. One-sided formula of study-level
-covariates for meta-regression. Defaults to \code{~ 1}.}
 }
 \value{
 An object of class \code{metaLik_data} to pass as the

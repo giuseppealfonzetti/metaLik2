@@ -32,25 +32,18 @@ set_data_cols <- function(TYPE = c("continuous", "binary"), COLS = NULL) {
 #'   names from [set_data_cols()], e.g. `c(effect = "logOR")`. Valid roles are
 #'   `effect`, `variance` for `TYPE = "continuous"` and `event1`, `n1`,
 #'   `event2`, `n2` for `TYPE = "binary"`.
-#' @param COVARIATES Only available for `TYPE="continuous"`. One-sided formula of study-level
-#'   covariates for meta-regression. Defaults to `~ 1`.
 #'
 #' @return An object of class `metaLik_data` to pass as the
 #'   `data` argument of [metaLik2()].
 #'
 #' @export
-#' @importFrom stats model.matrix
 set_data <- function(
   DATA,
   TYPE = c("continuous", "binary"),
-  COLS = NULL,
-  COVARIATES = ~1
+  COLS = NULL
 ) {
   TYPE <- match.arg(TYPE)
   stopifnot(is.data.frame(DATA))
-  if (TYPE == "binary" && !missing(COVARIATES)) {
-    stop("covariates apply to continuous outcomes only")
-  }
   cols <- set_data_cols(TYPE, COLS)
   miss <- setdiff(cols, names(DATA))
   if (length(miss)) {
@@ -59,10 +52,9 @@ set_data <- function(
   if (TYPE == "continuous") {
     y <- as.numeric(DATA[[cols[["effect"]]]])
     s2 <- as.numeric(DATA[[cols[["variance"]]]])
-    X <- model.matrix(COVARIATES, DATA)
-    stopifnot(length(s2) == length(y), nrow(X) == length(y), all(s2 > 0))
+    stopifnot(length(s2) == length(y), all(s2 > 0))
     structure(
-      list(type = "continuous", y = y, X = X, s2 = s2),
+      list(type = "continuous", y = y, s2 = s2, frame = DATA),
       class = "metaLik_data"
     )
   } else {

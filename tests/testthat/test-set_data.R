@@ -19,11 +19,12 @@ test_that("set_data_cols overrides named roles only", {
 
 test_that("set_data builds continuous object", {
   df <- data.frame(y = c(0.1, -0.2), sigma2 = c(0.04, 0.09), age = c(50, 60))
-  obj <- set_data(df, "continuous", COVARIATES = ~age)
+  obj <- set_data(df, "continuous")
   expect_s3_class(obj, "metaLik_data")
   expect_equal(obj$type, "continuous")
   expect_equal(obj$y, df$y)
-  expect_equal(nrow(obj$X), 2)
+  expect_equal(obj$s2, df$sigma2)
+  expect_equal(obj$frame$age, df$age)
 })
 
 test_that("set_data builds binary object with custom cols", {
@@ -46,5 +47,4 @@ test_that("set_data rejects invalid input", {
     "columns not found"
   )
   expect_error(set_data(data.frame(y = 0.1, sigma2 = -1), "continuous"))
-  expect_error(set_data(df, "binary", COVARIATES = ~ 1 + 1), "covariates apply")
 })
