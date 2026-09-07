@@ -34,8 +34,7 @@ profiles the first-order \code{r} only.}
 \item{VERBOSE}{Print \code{\link[likelihoodAsy:rstar.ci]{likelihoodAsy::rstar.ci()}}'s progress? Defaults to \code{FALSE}.}
 }
 \value{
-An object of class \code{metaLik2.profile}. Use \code{\link[=plot]{plot()}}
-or \code{\link[=confint]{confint()}} on it.
+An object of class \code{rstarci}. Use with \code{\link[=print]{print()}}, \code{\link[=summary]{summary()}} and \code{\link[=plot]{plot()}}.
 }
 \description{
 Interval inference via \code{\link[likelihoodAsy:rstar.ci]{likelihoodAsy::rstar.ci()}}. It returns a

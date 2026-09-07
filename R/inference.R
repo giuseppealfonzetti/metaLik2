@@ -12,8 +12,8 @@
 #' @param VERBOSE Print [likelihoodAsy::rstar.ci()]'s progress? Defaults to `FALSE`.
 #' @param ... Passed to methods.
 #'
-#' @return An object of class `metaLik2.profile`. Use [plot()]
-#'   or [confint()] on it.
+#' @return An object of class `rstarci`. Use with [print()], [summary()] and [plot()].
+#'
 #' @export
 rstarci <- function(FIT, ...) UseMethod("rstarci")
 
