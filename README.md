@@ -7,8 +7,6 @@
 
 [![Lifecycle:
 experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
-[![CRAN
-status](https://www.r-pkg.org/badges/version/metaLik2)](https://CRAN.R-project.org/package=metaLik2)
 <!-- badges: end -->
 
 The goal of metaLik2 is to …
@@ -18,5 +16,5 @@ The goal of metaLik2 is to …
 You can install the development version of metaLik2 like so:
 
 ``` r
-# FILL THIS IN! HOW CAN PEOPLE INSTALL YOUR DEV PACKAGE?
+pak::pkg_install("giuseppealfonzetti/metaLik2")
 ```
