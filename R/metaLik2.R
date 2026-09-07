@@ -58,3 +58,28 @@ metaLik2 <- function(
     class = "metaLik2"
   )
 }
+
+#' @export
+coef.metaLik2 <- function(object, ...) object$coefficients
+
+#' @export
+vcov.metaLik2 <- function(object, ...) object$vcov
+
+#' @export
+logLik.metaLik2 <- function(object, ...) object$logLik
+
+#' @export
+print.metaLik2 <- function(x, ...) {
+  cat("metaLik2 fit:", x$model$name, "\n\n")
+  print.default(format(x$coefficients), print.gap = 2, quote = FALSE)
+  if (!is.null(x$model$het)) {
+    h <- x$model$het(x$coefficients)
+    cat(
+      "\nHeterogeneity: ",
+      paste(names(h), "=", format(h, digits = 4), collapse = "  "),
+      "\n"
+    )
+  }
+  cat("\nLog-likelihood:", format(x$logLik, digits = 4), "\n")
+  invisible(x)
+}
