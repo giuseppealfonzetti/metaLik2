@@ -20,7 +20,7 @@ rstarci(FIT, ...)
 \arguments{
 \item{FIT}{A \code{metaLik2} fit from \code{\link[=metaLik2]{metaLik2()}}.}
 
-\item{...}{Passed to methods.}
+\item{...}{Passed to \code{\link[likelihoodAsy:rstar.ci]{likelihoodAsy::rstar.ci()}}.}
 
 \item{PARAM}{Scalar of interest: a coefficient index or name.}
 

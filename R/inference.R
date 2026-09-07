@@ -10,7 +10,7 @@
 #' @param R Number of simulated datasets for Skovgaard's covariances.
 #' @param SEED Optional seed for simulation rng.
 #' @param VERBOSE Print [likelihoodAsy::rstar.ci()]'s progress? Defaults to `FALSE`.
-#' @param ... Passed to methods.
+#' @param ... Passed to [likelihoodAsy::rstar.ci()].
 #'
 #' @return An object of class `rstarci`. Use with [print()], [summary()] and [plot()].
 #'
@@ -40,7 +40,8 @@ rstarci.metaLik2 <- function(
       datagen = model$datagen,
       R = R,
       seed = SEED,
-      ronly = ORDER == "first"
+      ronly = ORDER == "first",
+      ...
     )
   }
   if (VERBOSE) {
