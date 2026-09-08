@@ -190,7 +190,7 @@ normal-between-study random-effects model. The overall log-odds ratio is
 the `delta` parameter.
 
 ``` r
-fitBN <- metaLik2("binomial_normal", dB)
+fitBN <- metaLik2::metaLik2("binomial_normal", dB)
 c(delta = coef(fitBN)[["delta"]], tau2 = exp(coef(fitBN)[["log_tau2"]]))
 #>      delta       tau2 
 #> -0.7450028  0.2948875
@@ -200,7 +200,7 @@ The same model is available in `metafor` as a mixed-effects logistic
 regression, and the Wald confidence intervals coincide.
 
 ``` r
-fitBN0 <- rma.glmm(measure = "OR", ai = tpos, bi = tneg, ci = cpos, di = cneg,
+fitBN0 <- metafor::rma.glmm(measure = "OR", ai = tpos, bi = tneg, ci = cpos, di = cneg,
                    data = dat.bcg, model = "UM.FS")
 c(delta = as.numeric(fitBN0$beta), tau2 = fitBN0$tau2)
 #>      delta       tau2 
@@ -258,7 +258,7 @@ shapes per arm (`log_a1`, `log_b1`, `log_a2`, `log_b2`) plus a
 dependence parameter `eta`.
 
 ``` r
-fitBB <- metaLik2("binomial_beta", dB)
+fitBB <- metaLik2::metaLik2("binomial_beta", dB)
 coef(fitBB)
 #>     log_a1     log_b1     log_a2     log_b2        eta 
 #> -0.3592152  3.6928105 -0.5808334  2.5167583 16.9423928
