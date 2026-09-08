@@ -150,6 +150,8 @@ probabilities are random. Its parameters are the log beta shapes per arm
 ```{r binary-beta-fit}
 fitBB <- metaLik2::metaLik2("binomial_beta", dB)
 coef(fitBB)
+c(delta = unname(coef(fitBB)[["log_a1"]] - coef(fitBB)[["log_b1"]] -
+    coef(fitBB)[["log_a2"]] + coef(fitBB)[["log_b2"]]))
 ```
 
 Here the scalar of interest `delta = log(a1 / b1) - log(a2 / b2)` is the

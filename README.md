@@ -1,4 +1,3 @@
-
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
 # metaLik2
@@ -8,6 +7,7 @@
 [![Lifecycle:
 experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
 [![R-CMD-check](https://github.com/giuseppealfonzetti/metaLik2/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/giuseppealfonzetti/metaLik2/actions/workflows/R-CMD-check.yaml)
+
 <!-- badges: end -->
 
 The `metaLik2` provides higher order likelihood inference for
@@ -19,7 +19,7 @@ models than
 
 You can install the development version of metaLik2 like so:
 
-``` r
+```r
 pak::pkg_install("giuseppealfonzetti/metaLik2")
 ```
 
@@ -28,7 +28,7 @@ pak::pkg_install("giuseppealfonzetti/metaLik2")
 We fit the same random-effects model to the `diuretics` data shipped
 with `metaLik`, using both `metaLik()` and `metaLik2()`
 
-``` r
+```r
 library(metaLik)
 library(metaLik2)
 data(diuretics)
@@ -45,7 +45,7 @@ fitNN0 <- metaLik::metaLik(y ~ 1, data = diuretics, sigma2 = sigma2)
 The fit object supports `print()`, `coef()`, `vcov()` and `logLik()`
 methods.
 
-``` r
+```r
 fitNN 
 #> metaLik2 fit: normal_normal 
 #> 
@@ -76,7 +76,7 @@ logLik(fitNN0) # constant term dropped
 
 The `confint()` method provides Wald confidence intervals
 
-``` r
+```r
 confint(fitNN)
 #>                  2.5 %     97.5 %
 #> (Intercept) -0.9220592 -0.1126274
@@ -89,7 +89,7 @@ Both packages test a scalar parameter using the `r` statistic or
 Skovgaard’s `r*`. In `metaLik2()` computations are run via
 `likelihoodAsy`
 
-``` r
+```r
 metaLik2::rstar_test(fitNN, PARAM = 1, ALTERNATIVE = "greater")
 #> 
 #> Signed profile log-likelihood ratio test for parameter (Intercept)
@@ -115,7 +115,7 @@ metaLik::test.metaLik(fitNN0, param = 1, alternative = "greater")
 Confidence intervals can be computed via `rstar_ci()`, which returns an
 `rstarci` object from the `likelihoodAsy` package
 
-``` r
+```r
 ci <- metaLik2::rstar_ci(fitNN, SEED = 123)
 class(ci)
 #> [1] "rstarci"
@@ -123,14 +123,14 @@ class(ci)
 
 which comes with `print()`, `summary()` and `plot()` methods.
 
-``` r
+```r
 ci
 #> Confidence interval calculations based on likelihood asymptotics
 #> 1st-order
-#>          90%                         95%                         99%     
+#>          90%                         95%                         99%   
 #> ( -0.8935  ,  -0.1415 )         ( -0.98330  ,  -0.04845 )         ( -1.1910  ,   0.1714 )
 #> 2nd-order
-#>          90%                         95%                         99%     
+#>          90%                         95%                         99%   
 #> ( -0.95714  ,  -0.07698 )        ( -1.06111  ,   0.03794 )        ( -1.3116  ,   0.3104 )
 summary(ci)
 #> Confidence interval calculations based on likelihood asymptotics
@@ -140,10 +140,10 @@ summary(ci)
 #> Skovgaard covariances computed with 1000 Monte Carlo draws
 #> -----------------------------------------------------------------------------
 #> 1st-order
-#>          90%                         95%                         99%     
+#>          90%                         95%                         99%   
 #> ( -0.8935  ,  -0.1415 )       ( -0.98330  ,  -0.04845 )       ( -1.1910  ,   0.1714 )
 #> 2nd-order
-#>          90%                         95%                         99%     
+#>          90%                         95%                         99%   
 #> ( -0.95714  ,  -0.07698 )       ( -1.06111  ,   0.03794 )       ( -1.3116  ,   0.3104 )
 #> -----------------------------------------------------------------------------
 #> Decomposition of high-order adjustment
@@ -165,7 +165,7 @@ For studies reporting a 2x2 table of event counts, we use the `dat.bcg`
 BCG-vaccine data shipped with `metafor`, reshaped into the
 `event1/n1/event2/n2` layout that `set_data(..., "binary")` expects.
 
-``` r
+```r
 library(metafor)
 counts <- with(dat.bcg, data.frame(
   event1 = tpos, n1 = tpos + tneg,
@@ -188,7 +188,7 @@ The `"binomial_normal"` model fits a binomial-within-study,
 normal-between-study random-effects model. The overall log-odds ratio is
 the `delta` parameter.
 
-``` r
+```r
 fitBN <- metaLik2::metaLik2("binomial_normal", dB)
 c(delta = coef(fitBN)[["delta"]], tau2 = exp(coef(fitBN)[["log_tau2"]]))
 #>      delta       tau2 
@@ -198,7 +198,7 @@ c(delta = coef(fitBN)[["delta"]], tau2 = exp(coef(fitBN)[["log_tau2"]]))
 The same model is available in `metafor` as a mixed-effects logistic
 regression, and the Wald confidence intervals coincide.
 
-``` r
+```r
 fitBN0 <- metafor::rma.glmm(measure = "OR", ai = tpos, bi = tneg, ci = cpos, di = cneg,
                    data = dat.bcg, model = "UM.FS")
 c(delta = as.numeric(fitBN0$beta), tau2 = fitBN0$tau2)
@@ -228,7 +228,7 @@ confint(fitBN)
 Higher-order inference on `delta` uses the same `r*` interface as the
 continuous case.
 
-``` r
+```r
 metaLik2::rstar_test(fitBN, PARAM = "delta", R = 200)
 #> 
 #> Signed profile log-likelihood ratio test for parameter delta
@@ -241,10 +241,10 @@ metaLik2::rstar_test(fitBN, PARAM = "delta", R = 200)
 metaLik2::rstar_ci(fitBN, PARAM = "delta", R = 200)
 #> Confidence interval calculations based on likelihood asymptotics
 #> 1st-order
-#>          90%                         95%                         99%     
+#>          90%                         95%                         99%   
 #> ( -1.0574  ,  -0.4464 )         ( -1.1273  ,  -0.3814 )         ( -1.2801  ,  -0.2386 )
 #> 2nd-order
-#>          90%                         95%                         99%     
+#>          90%                         95%                         99%   
 #> ( -1.0922  ,  -0.4222 )        ( -1.169  ,  -0.348 )        ( -1.3382  ,  -0.1825 )
 ```
 
@@ -256,18 +256,22 @@ both arm probabilities are random. Its parameters are the log beta
 shapes per arm (`log_a1`, `log_b1`, `log_a2`, `log_b2`) plus a
 dependence parameter `eta`.
 
-``` r
+```r
 fitBB <- metaLik2::metaLik2("binomial_beta", dB)
 coef(fitBB)
 #>     log_a1     log_b1     log_a2     log_b2        eta 
 #> -0.3592152  3.6928105 -0.5808334  2.5167583 16.9423928
+c(delta = unname(coef(fitBB)[["log_a1"]] - coef(fitBB)[["log_b1"]] -
+    coef(fitBB)[["log_a2"]] + coef(fitBB)[["log_b2"]]))
+#>     delta 
+#> -0.954434
 ```
 
 Here the scalar of interest `delta = log(a1 / b1) - log(a2 / b2)` is the
 log-odds ratio contrast between the two arm means, and takes the same
 `r*` interface.
 
-``` r
+```r
 metaLik2::rstar_test(fitBB, PARAM = "delta", R = 200)
 #> 
 #> Signed profile log-likelihood ratio test for parameter delta
