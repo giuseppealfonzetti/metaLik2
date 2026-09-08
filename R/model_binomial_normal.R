@@ -1,6 +1,6 @@
 model_binomial_normal <- function(nodes = 30, maxit = 25, tol = 1e-5) {
   gh <- statmod::gauss.quad(nodes, "hermite")
-  metaLik2_set_model(
+  set_model(
     NAME = "binomial_normal",
     DATA_TYPE = "binary",
     LOGLIK = function(theta, data) {

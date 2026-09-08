@@ -1,6 +1,6 @@
 #' Set data column names
 #'
-#' Automatic dispatch used in [metaLik2_set_data()] to fill the `COLS` header names vector.
+#' Automatic dispatch used in [set_data()] to fill the `COLS` header names vector.
 #'
 #' @param TYPE Outcome type: `"continuous"` or `"binary"`.
 #' @param COLS Optional named character vector overriding default column names
@@ -9,10 +9,10 @@
 #'   `TYPE = "binary"`.
 #' @return A named character vector mapping roles to column names.
 #' @examples
-#' metaLik2_set_data_cols("continuous")
-#' metaLik2_set_data_cols("binary", c(event1 = "tpos", n1 = "trials"))
+#' set_data_cols("continuous")
+#' set_data_cols("binary", c(event1 = "tpos", n1 = "trials"))
 #' @export
-metaLik2_set_data_cols <- function(TYPE = c("continuous", "binary"), COLS = NULL) {
+set_data_cols <- function(TYPE = c("continuous", "binary"), COLS = NULL) {
   TYPE <- match.arg(TYPE)
   cols <- switch(
     TYPE,
@@ -29,22 +29,22 @@ metaLik2_set_data_cols <- function(TYPE = c("continuous", "binary"), COLS = NULL
 #' @param DATA A data frame of study-level columns.
 #' @param TYPE Outcome type: `"continuous"` for study-level effect estimate; `"binary"` for a study-specific 2x2 table of event counts.
 #' @param COLS Optional named character vector overriding the default column
-#'   names from [metaLik2_set_data_cols()], e.g. `c(effect = "logOR")`. Valid roles are
+#'   names from [set_data_cols()], e.g. `c(effect = "logOR")`. Valid roles are
 #'   `effect`, `variance` for `TYPE = "continuous"` and `event1`, `n1`,
 #'   `event2`, `n2` for `TYPE = "binary"`.
 #'
-#' @return An object of class `metaLik_data` to pass as the
+#' @return An object of class `metaLik2_data` to pass as the
 #'   `data` argument of [metaLik2()].
 #'
 #' @export
-metaLik2_set_data <- function(
+set_data <- function(
   DATA,
   TYPE = c("continuous", "binary"),
   COLS = NULL
 ) {
   TYPE <- match.arg(TYPE)
   stopifnot(is.data.frame(DATA))
-  cols <- metaLik2_set_data_cols(TYPE, COLS)
+  cols <- set_data_cols(TYPE, COLS)
   miss <- setdiff(cols, names(DATA))
   if (length(miss)) {
     stop("columns not found in DATA: ", paste(miss, collapse = ", "))
@@ -55,7 +55,7 @@ metaLik2_set_data <- function(
     stopifnot(length(s2) == length(y), all(s2 > 0))
     structure(
       list(type = "continuous", y = y, s2 = s2, frame = DATA),
-      class = "metaLik_data"
+      class = "metaLik2_data"
     )
   } else {
     e1 <- DATA[[cols[["event1"]]]]
@@ -73,15 +73,15 @@ metaLik2_set_data <- function(
     )
     structure(
       list(type = "binary", y1 = e1, n1 = m1, y2 = e2, n2 = m2),
-      class = "metaLik_data"
+      class = "metaLik2_data"
     )
   }
 }
 
 
 #' @export
-print.metaLik_data <- function(x, ...) {
+print.metaLik2_data <- function(x, ...) {
   K <- if (x$type == "continuous") length(x$y) else length(x$y1)
-  cat(sprintf("metaLik_data: %s, %d studies\n", x$type, K))
+  cat(sprintf("metaLik2_data: %s, %d studies\n", x$type, K))
   invisible(x)
 }

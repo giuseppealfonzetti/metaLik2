@@ -16,9 +16,9 @@
 #' @param HET Optional coefficients-to-heterogeneity function (e.g. `tau^2`),
 #'   or `NULL`.
 #'
-#' @return An object of class `metaLik_model`.
+#' @return An object of class `metaLik2_model`.
 #' @export
-metaLik2_set_model <- function(
+set_model <- function(
   NAME,
   DATA_TYPE,
   LOGLIK,
@@ -53,15 +53,15 @@ metaLik2_set_model <- function(
       het = HET,
       fpsi_builder = FPSI_BUILDER
     ),
-    class = "metaLik_model"
+    class = "metaLik2_model"
   )
 }
 
-#' @param x A `metaLik_model` object.
+#' @param x A `metaLik2_model` object.
 #' @param ... Ignored.
-#' @rdname metaLik2_set_model
+#' @rdname set_model
 #' @export
-print.metaLik_model <- function(x, ...) {
+print.metaLik2_model <- function(x, ...) {
   cat(sprintf("metaLik model: %s (%s)\n", x$name, x$data_type))
   invisible(x)
 }

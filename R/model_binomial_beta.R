@@ -18,7 +18,7 @@ model_binomial_beta <- function() {
       mu2 = a2 / (a2 + b2)
     )
   }
-  metaLik2_set_model(
+  set_model(
     NAME = "binomial_beta",
     DATA_TYPE = "binary",
     LOGLIK = function(theta, data) {

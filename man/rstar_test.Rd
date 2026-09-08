@@ -3,7 +3,7 @@
 \name{rstar_test}
 \alias{rstar_test}
 \alias{rstar_test.metaLik2}
-\alias{print.metaLik2.test}
+\alias{print.metaLik2_test}
 \title{Hypothesis testing on a scalar fixed-effect component in meta-analysis amodels}
 \usage{
 rstar_test(FIT, ...)
@@ -20,7 +20,7 @@ rstar_test(FIT, ...)
   ...
 )
 
-\method{print}{metaLik2.test}(x, ...)
+\method{print}{metaLik2_test}(x, ...)
 }
 \arguments{
 \item{FIT}{A \code{metaLik2} fit from \code{\link[=metaLik2]{metaLik2()}}.}
@@ -42,10 +42,10 @@ signed profile LR \code{r} only? Defaults to \code{FALSE}.}
 
 \item{VERBOSE}{Print \code{\link[likelihoodAsy:rstar]{likelihoodAsy::rstar()}}'s trace? Defaults to \code{FALSE}.}
 
-\item{x}{A \code{metaLik2.test} object.}
+\item{x}{A \code{metaLik2_test} object.}
 }
 \value{
-An object of class \code{metaLik2.test}.
+An object of class \code{metaLik2_test}.
 }
 \description{
 Tests a hypothesis on one scalar parameter of interest using the \code{r} or Skovgaard's \verb{r*}, via
@@ -53,6 +53,6 @@ Tests a hypothesis on one scalar parameter of interest using the \code{r} or Sko
 }
 \examples{
 data(vaccine, package = "metaLik")
-d <- metaLik2_set_data(vaccine, "continuous")
+d <- set_data(vaccine, "continuous")
 rstar_test(metaLik2("normal_normal", d, FORMULA = ~ latitude), PARAM = "latitude")
 }

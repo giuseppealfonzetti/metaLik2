@@ -33,9 +33,9 @@ library(metaLik)
 library(metaLik2)
 data(diuretics)
 
-dN <- metaLik2_set_data(diuretics, "continuous")
+dN <- metaLik2::set_data(diuretics, "continuous")
 dN
-#> metaLik_data: continuous, 9 studies
+#> metaLik2_data: continuous, 9 studies
 fitNN <- metaLik2::metaLik2("normal_normal", dN)
 fitNN0 <- metaLik::metaLik(y ~ 1, data = diuretics, sigma2 = sigma2)
 ```
@@ -163,8 +163,7 @@ plot(ci)
 
 For studies reporting a 2x2 table of event counts, we use the `dat.bcg`
 BCG-vaccine data shipped with `metafor`, reshaped into the
-`event1/n1/event2/n2` layout that `metaLik2_set_data(..., "binary")`
-expects.
+`event1/n1/event2/n2` layout that `set_data(..., "binary")` expects.
 
 ``` r
 library(metafor)
@@ -172,7 +171,7 @@ counts <- with(dat.bcg, data.frame(
   event1 = tpos, n1 = tpos + tneg,
   event2 = cpos, n2 = cpos + cneg
 ))
-dB <- metaLik2_set_data(counts, "binary")
+dB <- metaLik2::set_data(counts, "binary")
 head(counts)
 #>   event1    n1 event2    n2
 #> 1      4   123     11   139

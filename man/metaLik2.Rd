@@ -28,7 +28,7 @@ metaLik2(
 \code{"binomial_normal"} or \code{"binomial_beta"} (binary outcomes). The data
 \code{type} must match the chosen model.}
 
-\item{DATA}{A \code{metaLik_data} object from \code{\link[=metaLik2_set_data]{metaLik2_set_data()}}.}
+\item{DATA}{A \code{metaLik2_data} object from \code{\link[=set_data]{set_data()}}.}
 
 \item{FORMULA}{One-sided formula of study-level covariates for meta-regression
 (continuous outcomes only). Defaults to \code{~ 1}.}

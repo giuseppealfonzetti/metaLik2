@@ -3,7 +3,7 @@
 #' @param MODEL Model name: `"normal_normal"` (continuous outcomes),
 #'   `"binomial_normal"` or `"binomial_beta"` (binary outcomes). The data
 #'   `type` must match the chosen model.
-#' @param DATA A `metaLik_data` object from [metaLik2_set_data()].
+#' @param DATA A `metaLik2_data` object from [set_data()].
 #' @param FORMULA One-sided formula of study-level covariates for meta-regression
 #'   (continuous outcomes only). Defaults to `~ 1`.
 #' @param ... Passed to the model constructor.
@@ -20,8 +20,8 @@ metaLik2 <- function(
   ...
 ) {
   MODEL <- match.arg(MODEL)
-  if (!inherits(DATA, "metaLik_data")) {
-    stop("data must be a metaLik_data object")
+  if (!inherits(DATA, "metaLik2_data")) {
+    stop("data must be a metaLik2_data object")
   }
   mod <- switch(
     MODEL,

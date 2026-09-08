@@ -70,11 +70,11 @@ rstar_ci.metaLik2 <- function(
 #'
 #' @param ... Passed to [likelihoodAsy::rstar()].
 #'
-#' @return An object of class `metaLik2.test`.
+#' @return An object of class `metaLik2_test`.
 #'
 #' @examples
 #' data(vaccine, package = "metaLik")
-#' d <- metaLik2_set_data(vaccine, "continuous")
+#' d <- set_data(vaccine, "continuous")
 #' rstar_test(metaLik2("normal_normal", d, FORMULA = ~ latitude), PARAM = "latitude")
 #' @importFrom stats pnorm
 #' @export
@@ -131,14 +131,14 @@ rstar_test.metaLik2 <- function(
     INF = if (RONLY) NA else out$INF,
     theta.hat = out$theta.hat
   )
-  structure(res, class = "metaLik2.test")
+  structure(res, class = "metaLik2_test")
 }
 
-#' @param x A `metaLik2.test` object.
+#' @param x A `metaLik2_test` object.
 #' @param ... Ignored.
 #' @rdname rstar_test
 #' @export
-print.metaLik2.test <- function(x, ...) {
+print.metaLik2_test <- function(x, ...) {
   digits <- max(3, getOption("digits") - 3)
   cat(
     "\nSigned profile log-likelihood ratio test for parameter ",

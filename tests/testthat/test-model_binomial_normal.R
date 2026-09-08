@@ -13,7 +13,7 @@ test_that("metaLik2 fits binomial_normal model", {
     event2 = rbinom(K, n2, plogis(mu - di / 2)),
     n2 = n2
   )
-  fit <- metaLik2("binomial_normal", metaLik2_set_data(df, "binary"), nodes = 15)
+  fit <- metaLik2("binomial_normal", set_data(df, "binary"), nodes = 15)
   expect_s3_class(fit, "metaLik2")
   expect_true(all(c("delta", "log_tau2") %in% names(coef(fit))))
   expect_true(is.finite(fit$logLik))
@@ -22,8 +22,8 @@ test_that("metaLik2 fits binomial_normal model", {
 
 test_that("binomial_normal rejects FORMULA and continuous data", {
   df <- data.frame(event1 = 2, n1 = 10, event2 = 1, n2 = 10)
-  d <- metaLik2_set_data(df, "binary")
+  d <- set_data(df, "binary")
   expect_error(metaLik2("binomial_normal", d, FORMULA = ~1), "FORMULA applies")
-  cont <- metaLik2_set_data(data.frame(y = 0.1, sigma2 = 0.04), "continuous")
+  cont <- set_data(data.frame(y = 0.1, sigma2 = 0.04), "continuous")
   expect_error(metaLik2("binomial_normal", cont), "needs binary data")
 })

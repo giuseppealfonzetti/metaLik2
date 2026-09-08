@@ -1,7 +1,7 @@
 test_that("metaLik2 fits normal_normal model", {
   set.seed(1)
   df <- data.frame(y = rnorm(30, 0.5, 0.3), sigma2 = rep(0.05, 30))
-  fit <- metaLik2("normal_normal", metaLik2_set_data(df, "continuous"))
+  fit <- metaLik2("normal_normal", set_data(df, "continuous"))
   expect_s3_class(fit, "metaLik2")
   expect_equal(names(coef(fit)), c("(Intercept)", "log_tau2"))
   expect_equal(dim(fit$vcov), c(2, 2))
@@ -13,15 +13,15 @@ test_that("metaLik2 fits meta-regression via FORMULA", {
   set.seed(2)
   x <- runif(30)
   df <- data.frame(y = 0.2 + 0.5 * x + rnorm(30, 0, 0.2), sigma2 = rep(0.04, 30), x = x)
-  fit <- metaLik2("normal_normal", metaLik2_set_data(df, "continuous"), FORMULA = ~x)
+  fit <- metaLik2("normal_normal", set_data(df, "continuous"), FORMULA = ~x)
   expect_equal(names(coef(fit)), c("(Intercept)", "x", "log_tau2"))
   expect_equal(ncol(fit$data$X), 2)
 })
 
 test_that("metaLik2 rejects bad data or mismatched type", {
   df <- data.frame(y = rnorm(10), sigma2 = rep(0.1, 10))
-  expect_error(metaLik2("normal_normal", df), "metaLik_data")
-  bin <- metaLik2_set_data(
+  expect_error(metaLik2("normal_normal", df), "metaLik2_data")
+  bin <- set_data(
     data.frame(event1 = 2, n1 = 10, event2 = 1, n2 = 10),
     "binary"
   )
