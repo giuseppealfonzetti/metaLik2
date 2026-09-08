@@ -24,8 +24,10 @@ importFrom(stats,
   plogis,
   pnorm,
   qlogis,
+  rbeta,
   rbinom,
   rnorm,
+  runif,
   setNames,
   var
 )

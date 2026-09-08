@@ -30,7 +30,7 @@ You can install the development version of metaLik2 like so:
 pak::pkg_install("giuseppealfonzetti/metaLik2")
 ```
 
-## Usage
+## Continuous outcomes
 
 We fit the same random-effects model to the `diuretics` data shipped with
 `metaLik`, using both `metaLik()` and `metaLik2()`
@@ -40,10 +40,10 @@ library(metaLik)
 library(metaLik2)
 data(diuretics)
 
-d <- metaLik2_set_data(diuretics, "continuous")
-d
-fit <- metaLik2::metaLik2("normal_normal", d)
-fit0 <- metaLik::metaLik(y ~ 1, data = diuretics, sigma2 = sigma2)
+dN <- metaLik2_set_data(diuretics, "continuous")
+dN
+fitNN <- metaLik2::metaLik2("normal_normal", dN)
+fitNN0 <- metaLik::metaLik(y ~ 1, data = diuretics, sigma2 = sigma2)
 ```
 
 ### A metaLik2 fit
@@ -51,20 +51,20 @@ fit0 <- metaLik::metaLik(y ~ 1, data = diuretics, sigma2 = sigma2)
 The fit object supports `print()`, `coef()`, `vcov()` and `logLik()` methods.
 
 ```{r methods}
-fit 
-coef(fit)
-vcov(fit)
-logLik(fit)
+fitNN 
+coef(fitNN)
+vcov(fitNN)
+logLik(fitNN)
 
-coef(fit0)
-log(fit0$tau2.mle)
-logLik(fit0) # constant term dropped
+coef(fitNN0)
+log(fitNN0$tau2.mle)
+logLik(fitNN0) # constant term dropped
 ```
 
 The `confint()` method provides Wald confidence intervals
 
 ```{r}
-confint(fit)
+confint(fitNN)
 ```
 
 ### Hypothesis testing
@@ -73,8 +73,8 @@ Both packages test a scalar parameter using the
 `r` statistic or Skovgaard's `r*`. In `metaLik2()` computations are run via `likelihoodAsy`
 
 ```{r test}
-metaLik2::rstar_test(fit, PARAM = 1, ALTERNATIVE = "greater")
-metaLik::test.metaLik(fit0, param = 1, alternative = "greater")
+metaLik2::rstar_test(fitNN, PARAM = 1, ALTERNATIVE = "greater")
+metaLik::test.metaLik(fitNN0, param = 1, alternative = "greater")
 ```
 
 ### Confidence intervals
@@ -82,20 +82,23 @@ metaLik::test.metaLik(fit0, param = 1, alternative = "greater")
 Confidence intervals can be computed via `rstar_ci()`, which returns an `rstarci` object from the `likelihoodAsy` package
 
 ```{r rstarci}
-pr <- metaLik2::rstar_ci(fit, SEED = 123)
-class(pr)
+ci <- metaLik2::rstar_ci(fitNN, SEED = 123)
+class(ci)
 ```
 
 which comes with `print()`, `summary()` and `plot()` methods.
 
 ```{r}
-pr
-summary(pr)
-plot(pr)
+ci
+summary(ci)
+plot(ci)
 ```
 
 ## Binary outcomes
 
+For studies reporting a 2x2 table of event counts, we use the `dat.bcg`
+BCG-vaccine data shipped with `metafor`, reshaped into the
+`event1/n1/event2/n2` layout that `metaLik2_set_data(..., "binary")` expects.
 
 ```{r binary-data, message=FALSE}
 library(metafor)
@@ -103,38 +106,56 @@ counts <- with(dat.bcg, data.frame(
   event1 = tpos, n1 = tpos + tneg,
   event2 = cpos, n2 = cpos + cneg
 ))
+dB <- metaLik2_set_data(counts, "binary")
 head(counts)
 ```
 
-We fit a `"binomial_normal"` using `metaLik2()`. The overall
-log-odds ratio is the `delta` parameter.
+### Binomial-normal
 
-```{r binary-fit}
-db <- metaLik2_set_data(counts, "binary")
-fitb <- metaLik2("binomial_normal", db)
-c(delta = coef(fitb)[["delta"]], tau2 = exp(coef(fitb)[["log_tau2"]]))
+The `"binomial_normal"` model fits a binomial-within-study,
+normal-between-study random-effects model. The overall log-odds ratio is the
+`delta` parameter.
+
+```{r binary-normal-fit}
+fitBN <- metaLik2("binomial_normal", dB)
+c(delta = coef(fitBN)[["delta"]], tau2 = exp(coef(fitBN)[["log_tau2"]]))
 ```
 
-The same model is available in `metafor` as a mixed-effects logistic regression.
+The same model is available in `metafor` as a mixed-effects logistic
+regression, and the Wald confidence intervals coincide.
 
-```{r binary-metafor}
-fitb0 <- rma.glmm(measure = "OR", ai = tpos, bi = tneg, ci = cpos, di = cneg,
-              data = dat.bcg, model = "UM.FS")
-c(delta = as.numeric(fitb0$beta), tau2 = fitb0$tau2)
+```{r binary-normal-metafor}
+fitBN0 <- rma.glmm(measure = "OR", ai = tpos, bi = tneg, ci = cpos, di = cneg,
+                   data = dat.bcg, model = "UM.FS")
+c(delta = as.numeric(fitBN0$beta), tau2 = fitBN0$tau2)
+c(summary(fitBN0)$ci.lb, summary(fitBN0)$ci.ub)
+confint(fitBN)
 ```
 
-The `metafor` package returns Wald confidence intervals, which coincide with `metaLik2` confint()
+Higher-order inference on `delta` uses the same `r*` interface as the
+continuous case.
 
-```{r}
-c(summary(fitb0)$ci.lb,summary(fitb0)$ci.ub)
-confint(fitb)
+```{r binary-normal-inference, warning=FALSE}
+metaLik2::rstar_test(fitBN, PARAM = "delta", R = 200)
+metaLik2::rstar_ci(fitBN, PARAM = "delta", R = 200)
 ```
 
+### Binomial-beta
 
-Higher-order inference on `delta` can be run using the same `r*` interface as the continuous
-case
+The `"binomial_beta"` model instead gives each arm a beta-binomial marginal and
+couples the two arms through a Sarmanov dependence term, so both arm
+probabilities are random. Its parameters are the log beta shapes per arm
+(`log_a1`, `log_b1`, `log_a2`, `log_b2`) plus a dependence parameter `eta`.
 
-```{r binary-inference, warning=FALSE}
-metaLik2::rstar_test(fitb, PARAM = "delta", R = 200)
-metaLik2::rstar_ci(fitb, PARAM = "delta", R = 200)
+```{r binary-beta-fit}
+fitBB <- metaLik2("binomial_beta", dB)
+coef(fitBB)
+```
+
+Here the scalar of interest `delta = log(a1 / b1) - log(a2 / b2)` is the
+log-odds ratio contrast between the two arm means, and takes the same `r*`
+interface. 
+
+```{r binary-beta-inference, warning=FALSE}
+metaLik2::rstar_test(fitBB, PARAM = "delta", R = 200)
 ```

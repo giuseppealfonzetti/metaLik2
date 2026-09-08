@@ -11,7 +11,7 @@
 #'
 #' @return An object of class `metaLik2`.
 #'
-#' @importFrom stats nlminb optimHess setNames rnorm var model.matrix dbinom dnorm plogis qlogis rbinom
+#' @importFrom stats nlminb optimHess setNames rnorm var model.matrix dbinom dnorm plogis qlogis rbinom rbeta runif
 #' @export
 metaLik2 <- function(
   MODEL = c("normal_normal", "binomial_normal", "binomial_beta"),
@@ -26,7 +26,8 @@ metaLik2 <- function(
   mod <- switch(
     MODEL,
     normal_normal = model_normal_normal(...),
-    binomial_normal = model_binomial_normal(...)
+    binomial_normal = model_binomial_normal(...),
+    binomial_beta = model_binomial_beta(...)
   )
   if (DATA$type != mod$data_type) {
     stop(sprintf(
