@@ -12,7 +12,7 @@
 #' @param VERBOSE Print [likelihoodAsy::rstar.ci()]'s progress? Defaults to `FALSE`.
 #' @param ... Passed to [likelihoodAsy::rstar.ci()].
 #'
-#' @return An object of class `rstarci`. Use with [print()], [summary()] and [plot()].
+#' @return An object of class `rstarci`. Use with `print()`, `summary()` and `plot()`.
 #'
 #' @export
 rstar_ci <- function(FIT, ...) UseMethod("rstar_ci")

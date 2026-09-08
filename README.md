@@ -74,6 +74,15 @@ logLik(fit0) # constant term dropped
 #> 'log Lik.' -1.198135 (df=3)
 ```
 
+The `confint()` method provides Wald confidence intervals
+
+``` r
+confint(fit)
+#>                  2.5 %     97.5 %
+#> (Intercept) -0.9220592 -0.1126274
+#> log_tau2    -3.0418864  0.1764472
+```
+
 ### Hypothesis testing
 
 Both packages test a scalar parameter using the `r` statistic or
@@ -148,4 +157,92 @@ summary(pr)
 plot(pr)
 ```
 
-<img src="man/figures/README-unnamed-chunk-2-1.png" alt="" width="100%" />
+<img src="man/figures/README-unnamed-chunk-3-1.png" alt="" width="100%" />
+
+## Binary outcomes
+
+``` r
+library(metafor)
+counts <- with(dat.bcg, data.frame(
+  event1 = tpos, n1 = tpos + tneg,
+  event2 = cpos, n2 = cpos + cneg
+))
+head(counts)
+#>   event1    n1 event2    n2
+#> 1      4   123     11   139
+#> 2      6   306     29   303
+#> 3      3   231     11   220
+#> 4     62 13598    248 12867
+#> 5     33  5069     47  5808
+#> 6    180  1541    372  1451
+```
+
+We fit a `"binomial_normal"` using `metaLik2()`. The overall log-odds
+ratio is the `delta` parameter.
+
+``` r
+db <- metaLik2_set_data(counts, "binary")
+fitb <- metaLik2("binomial_normal", db)
+c(delta = coef(fitb)[["delta"]], tau2 = exp(coef(fitb)[["log_tau2"]]))
+#>      delta       tau2 
+#> -0.7450028  0.2948875
+```
+
+The same model is available in `metafor` as a mixed-effects logistic
+regression.
+
+``` r
+fitb0 <- rma.glmm(measure = "OR", ai = tpos, bi = tneg, ci = cpos, di = cneg,
+              data = dat.bcg, model = "UM.FS")
+c(delta = as.numeric(fitb0$beta), tau2 = fitb0$tau2)
+#>      delta       tau2 
+#> -0.7450233  0.2949026
+```
+
+The `metafor` package returns Wald confidence intervals, which coincide
+with `metaLik2` confint()
+
+``` r
+c(summary(fitb0)$ci.lb,summary(fitb0)$ci.ub)
+#> [1] -1.0891246 -0.4009221
+confint(fitb)
+#>              2.5 %     97.5 %
+#> mu1      -3.467844 -2.3660115
+#> mu2      -3.375192 -2.5939718
+#> mu3      -4.129531 -2.9986741
+#> mu4      -4.783150 -4.5087935
+#> mu5      -5.156175 -4.7063054
+#> mu6      -1.641110 -1.4463346
+#> mu7      -5.422918 -4.4890926
+#> mu8      -5.227766 -5.1036716
+#> mu9      -5.560839 -5.0915046
+#> mu10     -4.128411 -3.6178186
+#> mu11     -5.542486 -5.3232817
+#> mu12     -7.131783 -5.7347762
+#> mu13     -6.706122 -6.1778388
+#> delta    -1.089099 -0.4009065
+#> log_tau2 -2.224592 -0.2177308
+```
+
+Higher-order inference on `delta` can be run using the same `r*`
+interface as the continuous case
+
+``` r
+metaLik2::rstar_test(fitb, PARAM = "delta", R = 200)
+#> 
+#> Signed profile log-likelihood ratio test for parameter delta
+#> 
+#> First-order statistic
+#> r:-3.393, p-value:0.0006923
+#> Skovgaard's statistic
+#> rSkov:-3.135, p-value:0.00172
+#> alternative hypothesis: parameter is different from 0
+metaLik2::rstar_ci(fitb, PARAM = "delta", R = 200)
+#> Confidence interval calculations based on likelihood asymptotics
+#> 1st-order
+#>          90%                         95%                         99%     
+#> ( -1.0574  ,  -0.4464 )         ( -1.1273  ,  -0.3814 )         ( -1.2801  ,  -0.2386 )
+#> 2nd-order
+#>          90%                         95%                         99%     
+#> ( -1.0922  ,  -0.4222 )        ( -1.169  ,  -0.348 )        ( -1.3382  ,  -0.1825 )
+```

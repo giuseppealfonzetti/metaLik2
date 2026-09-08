@@ -34,7 +34,7 @@ only? Defaults to \code{FALSE}.}
 \item{VERBOSE}{Print \code{\link[likelihoodAsy:rstar.ci]{likelihoodAsy::rstar.ci()}}'s progress? Defaults to \code{FALSE}.}
 }
 \value{
-An object of class \code{rstarci}. Use with \code{\link[=print]{print()}}, \code{\link[=summary]{summary()}} and \code{\link[=plot]{plot()}}.
+An object of class \code{rstarci}. Use with \code{print()}, \code{summary()} and \code{plot()}.
 }
 \description{
 Interval inference via \code{\link[likelihoodAsy:rstar.ci]{likelihoodAsy::rstar.ci()}}. It returns a

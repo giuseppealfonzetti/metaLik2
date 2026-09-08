@@ -16,10 +16,15 @@ export(metaLik2_set_model)
 export(rstar_ci)
 export(rstar_test)
 importFrom(stats,
+  dbinom,
+  dnorm,
   model.matrix,
   nlminb,
   optimHess,
+  plogis,
   pnorm,
+  qlogis,
+  rbinom,
   rnorm,
   setNames,
   var

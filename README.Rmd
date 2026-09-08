@@ -61,6 +61,12 @@ log(fit0$tau2.mle)
 logLik(fit0) # constant term dropped
 ```
 
+The `confint()` method provides Wald confidence intervals
+
+```{r}
+confint(fit)
+```
+
 ### Hypothesis testing
 
 Both packages test a scalar parameter using the
@@ -86,4 +92,49 @@ which comes with `print()`, `summary()` and `plot()` methods.
 pr
 summary(pr)
 plot(pr)
+```
+
+## Binary outcomes
+
+
+```{r binary-data, message=FALSE}
+library(metafor)
+counts <- with(dat.bcg, data.frame(
+  event1 = tpos, n1 = tpos + tneg,
+  event2 = cpos, n2 = cpos + cneg
+))
+head(counts)
+```
+
+We fit a `"binomial_normal"` using `metaLik2()`. The overall
+log-odds ratio is the `delta` parameter.
+
+```{r binary-fit}
+db <- metaLik2_set_data(counts, "binary")
+fitb <- metaLik2("binomial_normal", db)
+c(delta = coef(fitb)[["delta"]], tau2 = exp(coef(fitb)[["log_tau2"]]))
+```
+
+The same model is available in `metafor` as a mixed-effects logistic regression.
+
+```{r binary-metafor}
+fitb0 <- rma.glmm(measure = "OR", ai = tpos, bi = tneg, ci = cpos, di = cneg,
+              data = dat.bcg, model = "UM.FS")
+c(delta = as.numeric(fitb0$beta), tau2 = fitb0$tau2)
+```
+
+The `metafor` package returns Wald confidence intervals, which coincide with `metaLik2` confint()
+
+```{r}
+c(summary(fitb0)$ci.lb,summary(fitb0)$ci.ub)
+confint(fitb)
+```
+
+
+Higher-order inference on `delta` can be run using the same `r*` interface as the continuous
+case
+
+```{r binary-inference, warning=FALSE}
+metaLik2::rstar_test(fitb, PARAM = "delta", R = 200)
+metaLik2::rstar_ci(fitb, PARAM = "delta", R = 200)
 ```
