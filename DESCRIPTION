@@ -1,9 +1,9 @@
 Package: metaLik2
-Title: What the Package Does (One Line, Title Case)
+Title: Higher order inference for mixed-effects meta-analysis models
 Version: 0.0.0.9000
 Authors@R: 
     person("Giuseppe", "Alfonzetti", , "giuseppe.alfonzetti@uniud.it", role = c("aut", "cre"))
-Description: What the package does (one paragraph).
+Description: Higher order inference for mixed-effects meta-analysis models.
 License: MIT + file LICENSE
 Suggests:
     metaLik,
