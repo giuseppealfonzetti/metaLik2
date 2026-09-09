@@ -82,6 +82,6 @@ set_data <- function(
 #' @export
 print.metaLik2_data <- function(x, ...) {
   K <- if (x$type == "continuous") length(x$y) else length(x$y1)
-  cat(sprintf("metaLik2_data: %s, %d studies\n", x$type, K))
+  cat(sprintf("<metaLik2_data>: %s, %d studies\n", x$type, K))
   invisible(x)
 }

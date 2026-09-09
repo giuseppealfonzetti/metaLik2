@@ -82,7 +82,7 @@ logLik.metaLik2 <- function(object, ...) {
 #' @rdname metaLik2
 #' @export
 print.metaLik2 <- function(x, ...) {
-  cat("metaLik2 fit:", x$model$name, "\n\n")
+  cat("<metaLik2> fit:", x$model$name, "\n\n")
   print.default(format(x$coefficients), print.gap = 2, quote = FALSE)
   if (!is.null(x$model$het)) {
     h <- x$model$het(x$coefficients)

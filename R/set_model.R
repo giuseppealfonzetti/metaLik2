@@ -62,6 +62,6 @@ set_model <- function(
 #' @rdname set_model
 #' @export
 print.metaLik2_model <- function(x, ...) {
-  cat(sprintf("metaLik model: %s (%s)\n", x$name, x$data_type))
+  cat(sprintf("<metaLik2_model>: %s (%s)\n", x$name, x$data_type))
   invisible(x)
 }

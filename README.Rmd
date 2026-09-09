@@ -113,7 +113,7 @@ head(counts)
 ### Binomial-normal
 
 The `"binomial_normal"` model fits a binomial-within-study,
-normal-between-study random-effects model. The overall log-odds ratio is the
+normal-between-study random-effects model. The log-odds ratio between arms is the
 `delta` parameter.
 
 ```{r binary-normal-fit}
@@ -155,7 +155,7 @@ c(delta = unname(coef(fitBB)[["log_a1"]] - coef(fitBB)[["log_b1"]] -
 ```
 
 Here the scalar of interest `delta = log(a1 / b1) - log(a2 / b2)` is the
-log-odds ratio contrast between the two arm means, and takes the same `r*`
+log-odds ratio contrast between the two arm means, and uses the same `r*`
 interface. 
 
 ```{r binary-beta-inference, warning=FALSE}

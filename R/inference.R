@@ -140,6 +140,7 @@ rstar_test.metaLik2 <- function(
 #' @export
 print.metaLik2_test <- function(x, ...) {
   digits <- max(3, getOption("digits") - 3)
+  cat("<metaLik2_test>:")
   cat(
     "\nSigned profile log-likelihood ratio test for parameter ",
     x$param,
